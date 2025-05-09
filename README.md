@@ -47,11 +47,4 @@ akamai.net
 
 ---
 
-### ✅ Tips tambahan
 
-- Gantikan `https://github.com/username/...` dengan URL GitHub sebenar anda.
-- Letakkan **screenshot** (upload ke repo atau guna imgur) dan kemaskini link `![screenshot]`.
-
----
-
-Nak saya terus cipta fail `README.md` untuk anda dengan semua kandungan ni dalam format fail?
