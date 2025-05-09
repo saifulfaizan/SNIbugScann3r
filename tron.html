@@ -44,21 +44,31 @@
   <div id="results"></div>
 
   <script>
-    async function scanDomains() {
-      const input = document.getElementById("domainList").value;
-      const domains = input.split("\n").map(d => d.trim()).filter(Boolean);
-      const resultsDiv = document.getElementById("results");
-      resultsDiv.innerText = "Sedang mengimbas...\n";
+  async function scanDomains() {
+    const input = document.getElementById("domainList").value;
+    const domains = input.split("\n").map(d => d.trim()).filter(Boolean);
+    const resultsDiv = document.getElementById("results");
+    resultsDiv.innerText = "Sedang mengimbas...\n";
 
-      for (const domain of domains) {
-        try {
-          const response = await fetch("https://" + domain, { method: "HEAD", mode: "no-cors" });
-          resultsDiv.innerText += `${domain}: ✅ MUNGKIN AKTIF (No CORS - perlu uji lanjut)\n`;
-        } catch (err) {
-          resultsDiv.innerText += `${domain}: ❌ GAGAL\n`;
+    for (const domain of domains) {
+      try {
+        const res = await fetch(`/check?host=${domain}`);
+        const data = await res.json();
+
+        if (data.statusCode === 200 || data.statusCode === 301 || data.statusCode === 302) {
+          resultsDiv.innerText += `${domain}: ✅ AKTIF (status ${data.statusCode})\n`;
+        } else if (data.statusCode === 'FAILED') {
+          resultsDiv.innerText += `${domain}: ❌ GAGAL (${data.error})\n`;
+        } else {
+          resultsDiv.innerText += `${domain}: ⚠️ STATUS LAIN (${data.statusCode})\n`;
         }
+
+      } catch (err) {
+        resultsDiv.innerText += `${domain}: ❌ GAGAL (${err.message})\n`;
       }
     }
-  </script>
+  }
+</script>
+
 </body>
 </html>
